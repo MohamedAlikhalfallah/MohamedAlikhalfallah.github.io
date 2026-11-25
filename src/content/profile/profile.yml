@@ -1,0 +1,81 @@
+name: Mohamed Ali Khalfallah
+
+role:
+  en: Software Engineer
+  de: Softwareentwickler
+
+headline:
+  en: I build full-stack web apps and software for robots and mobile devices.
+  de: Ich entwickle Full-Stack-Webanwendungen und Software für Roboter und mobile Geräte.
+
+about:
+  en: >-
+    I hold a B.Sc. in Software Engineering from the University of Duisburg-Essen.
+    I have built web applications end to end, from Angular and React frontends to
+    Spring Boot REST APIs with authentication, databases and Docker. I also work on
+    robotics with ROS 2 and on iOS: my bachelor thesis is a real-time occupancy
+    mapping system that runs entirely on a LiDAR iPhone. I'm looking for a junior
+    software engineering role where I can ship production software and keep growing
+    in testing, CI/CD and clean architecture.
+  de: >-
+    Ich habe einen B.Sc. in Software Engineering an der Universität Duisburg-Essen.
+    Ich habe Webanwendungen von Anfang bis Ende umgesetzt, von Angular- und
+    React-Frontends bis zu Spring-Boot-REST-APIs mit Authentifizierung, Datenbanken
+    und Docker. Außerdem arbeite ich an Robotik mit ROS 2 und an iOS: Meine
+    Bachelorarbeit ist ein Echtzeit-System zur Belegungskartierung, das vollständig
+    auf einem iPhone mit LiDAR läuft. Ich suche eine Junior-Stelle in der
+    Softwareentwicklung, in der ich produktive Software ausliefere und mich in
+    Testing, CI/CD und sauberer Architektur weiterentwickle.
+
+available: true
+availability:
+  en: Open to junior software engineering roles
+  de: Offen für Junior-Stellen in der Softwareentwicklung
+
+location: Essen, Germany
+email: dali1804@outlook.fr
+phone: "+49 179 3923761"
+github: https://github.com/MohamedAlikhalfallah
+linkedin: https://www.linkedin.com/in/mohamed-ali-khalfallah-58526a207
+photo: /images/profile.jpg
+
+skills:
+  - group: { en: Languages, de: Programmiersprachen }
+    items: [Java, TypeScript, JavaScript, Python, C++, Swift]
+  - group: { en: Backend, de: Backend }
+    items: [Spring Boot, REST APIs, JWT, WebSocket]
+  - group: { en: Frontend, de: Frontend }
+    items: [Angular, React, HTML, SCSS, Bootstrap]
+  - group: { en: Mobile & AR, de: Mobile & AR }
+    items: [SwiftUI, ARKit, LiDAR, SIMD]
+  - group: { en: Databases, de: Datenbanken }
+    items: [PostgreSQL, MySQL, H2]
+  - group: { en: Tools & DevOps, de: Tools & DevOps }
+    items: [Docker, Git, GitHub Actions]
+  - group: { en: Robotics, de: Robotik }
+    items: [ROS 2 Jazzy, TF2, MoveIt2, ros2_control]
+
+experience:
+  - title: { en: Content Moderator, de: Content Moderator }
+    org: Telus Digital
+    period: { en: 05/2024 – present, de: 05/2024 – heute }
+
+education:
+  - degree: { en: B.Sc. Software Engineering, de: B.Sc. Software Engineering }
+    school: University of Duisburg-Essen
+    period: { en: 04/2022 – 10/2026, de: 04/2022 – 10/2026 }
+    details:
+      en: "Thesis: Development of a System for Probabilistic Occupancy Mapping with iOS"
+      de: "Bachelorarbeit: Entwicklung eines Systems zur probabilistischen Belegungskartierung mit iOS"
+
+languages:
+  - name: { en: Arabic, de: Arabisch }
+    level: { en: Native, de: Muttersprache }
+  - name: { en: German, de: Deutsch }
+    level: { en: Fluent, de: Sehr gut }
+  - name: { en: French, de: Französisch }
+    level: { en: Fluent, de: Sehr gut }
+  - name: { en: English, de: Englisch }
+    level: { en: Fluent, de: Sehr gut }
+  - name: { en: Spanish, de: Spanisch }
+    level: { en: Basic, de: Grundkenntnisse }

@@ -1,0 +1,27 @@
+repo: occupancy-mapper-ios
+title: OccupancyMapper
+hidden: false
+featured: true
+order: 1
+
+description:
+  en: >-
+    Real-time 2D and 3D probabilistic occupancy mapping on a LiDAR iPhone, running
+    entirely on the device. My bachelor thesis at the University of Duisburg-Essen.
+  de: >-
+    Probabilistische 2D- und 3D-Belegungskartierung in Echtzeit auf einem iPhone mit
+    LiDAR, vollständig auf dem Gerät. Meine Bachelorarbeit an der Universität Duisburg-Essen.
+
+tags: [Swift, SwiftUI, ARKit, LiDAR, SIMD]
+image: ""
+demo: ""
+
+highlights:
+  - label: { en: Time per frame (2D, median), de: Zeit pro Frame (2D, Median) }
+    value: 1.97 ms
+  - label: { en: Time per frame (3D, median), de: Zeit pro Frame (3D, Median) }
+    value: 2.81 ms
+  - label: { en: Frames over 60 Hz budget, de: Frames über 60-Hz-Budget }
+    value: "0"
+  - label: { en: Room size vs. tape measure, de: Raummaße vs. Maßband }
+    value: "≤ 2 cm"
