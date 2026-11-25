@@ -1,0 +1,137 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { t, useUI, type Lang } from '../i18n';
+
+interface Props { lang: Lang; profile: CollectionEntry<'profile'>['data']; }
+const { lang, profile } = Astro.props;
+const ui = useUI(lang);
+---
+<section class="hero">
+    <!-- Background: a live occupancy grid, like in my thesis -->
+    <canvas class="grid" aria-hidden="true"></canvas>
+
+    <div class="container inner">
+        <div class="text">
+            {profile.available && (
+                    <p class="status fade"><span class="dot"></span>{t(profile.availability, lang)}</p>
+            )}
+            <h1 class="morph-name">{profile.name}</h1>
+            <p class="role fade">{t(profile.role, lang)} · {t(profile.location, lang)}</p>
+            <p class="headline fade">{t(profile.headline, lang)}</p>
+            <div class="actions fade">
+                <a class="btn primary" href="#projects">{ui('hero.projects')}</a>
+                <a class="btn" href="#contact">{ui('hero.contact')}</a>
+            </div>
+        </div>
+
+        <figure class="photo">
+            <img class="morph-photo" src={profile.photo} alt={profile.name} width="280" height="382" />
+        </figure>
+    </div>
+</section>
+
+<style>
+    /* top padding leaves room for the menu bar, which sits on top of the hero */
+    .hero { position: relative; padding-block: calc(64px + 4.5rem) 5rem; }
+    .grid {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        /* fade the grid behind the text so it stays easy to read */
+        mask-image: linear-gradient(to right, rgb(0 0 0 / 0.35), #000 65%);
+    }
+    .inner {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 3rem;
+        align-items: center;
+    }
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--free);
+        border: 1px solid color-mix(in srgb, var(--free) 40%, transparent);
+        background: color-mix(in srgb, var(--free) 8%, var(--bg));
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+        margin-bottom: 1.75rem;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--free); box-shadow: 0 0 0 4px color-mix(in srgb, var(--free) 25%, transparent); }
+
+    h1 {
+        font-size: clamp(2.4rem, 6vw, 4.2rem);
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        transform-origin: top left;
+        will-change: transform;
+    }
+    .role { font-family: var(--font-mono); color: var(--accent); margin-bottom: 1.25rem; }
+    .headline { font-size: 1.3rem; color: var(--text); max-width: 34ch; margin-bottom: 2.25rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+    /* Photo in a "scanner" frame with corner brackets */
+    .photo { position: relative; margin: 0; padding: 14px; }
+    .photo::before, .photo::after {
+        content: '';
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        border: 2px solid var(--accent);
+        opacity: var(--brackets, 1);
+    }
+    .photo::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+    .photo::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+    .photo img {
+        width: 260px;
+        height: auto;
+        border-radius: 4px;
+        filter: grayscale(0.15) contrast(1.05);
+        transform-origin: top left;
+        will-change: transform;
+    }
+
+    @media (max-width: 760px) {
+        .inner { grid-template-columns: 1fr; }
+        .photo { order: -1; justify-self: start; }
+        .photo img { width: 170px; }
+        .hero { padding-block: calc(64px + 2rem) 3rem; }
+        .grid { mask-image: linear-gradient(to bottom, #000 40%, rgb(0 0 0 / 0.3)); }
+    }
+</style>
+
+<script>
+    import { startOccupancyGrid } from '../scripts/occupancy-grid';
+
+    // The big occupancy map behind the hero. The sensor is the photo, so the rays come
+    // "from me" – and they keep following the photo while it shrinks into the top bar.
+    // "astro:page-load" runs on the first visit and after every page change.
+    document.addEventListener('astro:page-load', () => {
+        const canvas = document.querySelector<HTMLCanvasElement>('.hero .grid');
+        const photo = document.querySelector<HTMLElement>('.hero .morph-photo');
+        if (!canvas) return;
+
+        // stop this animation when we leave the page
+        const stop = new AbortController();
+        document.addEventListener('astro:before-swap', () => stop.abort(), { once: true });
+
+        startOccupancyGrid(canvas, {
+            cell: 22,
+            layout: 'room',
+            followSensor: true,
+            signal: stop.signal,
+            sensor: () => {
+                const box = canvas.getBoundingClientRect();
+                const p = photo?.getBoundingClientRect();
+                return p
+                    ? { x: p.left + p.width / 2 - box.left, y: p.top + p.height / 2 - box.top }
+                    : { x: box.width * 0.75, y: box.height / 2 };
+            },
+        });
+    });
+</script>

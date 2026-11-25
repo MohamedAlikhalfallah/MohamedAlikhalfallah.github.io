@@ -6,22 +6,79 @@ order: 1
 
 description:
   en: >-
-    Real-time 2D and 3D probabilistic occupancy mapping on a LiDAR iPhone, running
-    entirely on the device. My bachelor thesis at the University of Duisburg-Essen.
+    Real-time 2D and 3D probabilistic occupancy mapping on a LiDAR iPhone, running entirely on the device. My bachelor thesis at the University of Duisburg-Essen.
   de: >-
-    Probabilistische 2D- und 3D-Belegungskartierung in Echtzeit auf einem iPhone mit
-    LiDAR, vollständig auf dem Gerät. Meine Bachelorarbeit an der Universität Duisburg-Essen.
+    Probabilistische 2D- und 3D-Belegungskartierung in Echtzeit auf einem iPhone mit LiDAR, vollständig auf dem Gerät. Meine Bachelorarbeit an der Universität Duisburg-Essen.
 
-tags: [Swift, SwiftUI, ARKit, LiDAR, SIMD]
+tags: [ Swift, SwiftUI, ARKit, LiDAR, SIMD ]
 image: ""
 demo: ""
-
+demo3d: occupancy
+language: Swift
 highlights:
-  - label: { en: Time per frame (2D, median), de: Zeit pro Frame (2D, Median) }
+  - label: { en: "Time per frame (2D, median)", de: "Zeit pro Frame (2D, Median)" }
     value: 1.97 ms
-  - label: { en: Time per frame (3D, median), de: Zeit pro Frame (3D, Median) }
+  - label: { en: "Time per frame (3D, median)", de: "Zeit pro Frame (3D, Median)" }
     value: 2.81 ms
   - label: { en: Frames over 60 Hz budget, de: Frames über 60-Hz-Budget }
     value: "0"
   - label: { en: Room size vs. tape measure, de: Raummaße vs. Maßband }
     value: "≤ 2 cm"
+
+    body:
+      en: |
+        A robot or a person walking through a building needs to know which space is free,
+        which is occupied, and which has not been seen yet. OccupancyMapper builds exactly
+        this kind of map live while you walk through a room with an iPhone – without any
+        external computer.
+
+        ### How it works
+
+        1. **Sensing** – ARKit provides the device pose and a LiDAR depth image for every frame.
+           Depth samples are filtered by range (0.2–5 m) and confidence.
+        2. **Unprojection** – every depth pixel becomes a 3D point in the world, using the
+           camera intrinsics and the device pose.
+        3. **Ray casting** – a ray from the camera to each point marks the cells along it as
+           free and the end cell as occupied (Bresenham in 2D and 3D).
+        4. **Bayesian update** – cells are updated in log-odds form with clamped values,
+           stored in one byte per cell.
+        5. **Bounded memory** – the map is stored sparsely in blocks; blocks more than ~12 m
+           away are streamed to disk and reloaded on return.
+        6. **Visualisation** – a live 2D map and a 3D voxel view, plus a statistics overlay.
+
+        ### Results
+
+        Tested on an iPhone 14 Pro Max: no frame ever went over the 60 Hz budget, the map
+        uses well under 1 MB, and the room dimensions match a tape measure within 2 cm.
+        Removed objects disappear from the map within seconds.
+
+        **Tech stack:** Swift, SwiftUI, ARKit, LiDAR, SIMD, Grand Central Dispatch.
+      de: |
+        Ein Roboter oder ein Mensch, der sich durch ein Gebäude bewegt, muss wissen, welcher
+        Raum frei ist, welcher belegt ist und welcher noch nicht gesehen wurde. OccupancyMapper
+        erstellt genau so eine Karte live, während man mit einem iPhone durch einen Raum geht –
+        ohne externen Computer.
+
+        ### Funktionsweise
+
+        1. **Erfassung** – ARKit liefert für jedes Frame die Pose des Geräts und ein
+           LiDAR-Tiefenbild. Tiefenwerte werden nach Entfernung (0,2–5 m) und Konfidenz gefiltert.
+        2. **Rückprojektion** – jedes Tiefenpixel wird mit den Kamera-Intrinsics und der Pose
+           zu einem 3D-Punkt in der Welt.
+        3. **Ray Casting** – ein Strahl von der Kamera zu jedem Punkt markiert die Zellen auf dem
+           Weg als frei und die Endzelle als belegt (Bresenham in 2D und 3D).
+        4. **Bayes-Update** – die Zellen werden in Log-Odds-Form mit begrenzten Werten
+           aktualisiert und mit einem Byte pro Zelle gespeichert.
+        5. **Begrenzter Speicher** – die Karte wird spärlich in Blöcken gespeichert; Blöcke, die
+           mehr als ~12 m entfernt sind, werden auf die Festplatte ausgelagert und bei Rückkehr
+           neu geladen.
+        6. **Visualisierung** – eine Live-2D-Karte und eine 3D-Voxel-Ansicht mit Statistik-Overlay.
+
+        ### Ergebnisse
+
+        Getestet auf einem iPhone 14 Pro Max: Kein Frame hat das 60-Hz-Budget überschritten, die
+        Karte braucht deutlich unter 1 MB, und die Raummaße stimmen auf 2 cm mit dem Maßband überein.
+        Entfernte Objekte verschwinden innerhalb von Sekunden aus der Karte.
+
+        **Tech-Stack:** Swift, SwiftUI, ARKit, LiDAR, SIMD, Grand Central Dispatch.
+updated: "2026-11-25"

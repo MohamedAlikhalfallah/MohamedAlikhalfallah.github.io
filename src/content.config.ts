@@ -15,19 +15,21 @@ const profile = defineCollection({
         about: text,
         available: z.boolean().default(true),
         availability: text,
-        location: z.string(),
+        location: text,
         email: z.string(),
         phone: z.string().default(''),
         github: z.string(),
         linkedin: z.string().default(''),
         photo: z.string(),
+        // Web3Forms access key for the contact form (empty = no form)
+        contactFormKey: z.string().default(''),
         skills: z.array(z.object({ group: text, items: z.array(z.string()) })).default([]),
         experience: z.array(z.object({
             title: text, org: z.string(), period: text,
             points: z.object({ en: z.array(z.string()).default([]), de: z.array(z.string()).default([]) }).optional(),
         })).default([]),
         education: z.array(z.object({
-            degree: text, school: z.string(), period: text, details: text.optional(),
+            degree: text, school: text, period: text, details: text.optional(),
         })).default([]),
         languages: z.array(z.object({ name: text, level: text })).default([]),
     }),
@@ -48,6 +50,11 @@ const projects = defineCollection({
         demo: z.string().default(''),
         highlights: z.array(z.object({ label: text, value: z.string() })).default([]),
         body: text.optional(),
+        // 3D demo: auto | occupancy | robot-arm | city | network | knot | none
+        demo3d: z.string().default('auto'),
+        // filled in automatically by the GitHub sync
+        language: z.string().default(''),   // main programming language
+        updated: z.string().default(''),    // date of the last push, e.g. 2026-11-25
     }),
 });
 

@@ -1,0 +1,113 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { marked } from 'marked';
+import Layout from '../../../layouts/Layout.astro';
+import Demo3D from '../../../components/Demo3D.astro';
+import { pickScene } from '../../../scripts/demos/pick';
+import { languages, t, useUI, type Lang } from '../../../i18n';
+
+// one page per visible project and per language, e.g. /en/projects/occupancy-mapper-ios/
+export async function getStaticPaths() {
+    const projects = (await getCollection('projects')).filter((p) => !p.data.hidden);
+    return languages.flatMap((lang) =>
+        projects.map((p) => ({ params: { lang, repo: p.data.repo }, props: { project: p.data } })),
+    );
+}
+
+const { project } = Astro.props;
+const lang = Astro.params.lang as Lang;
+const ui = useUI(lang);
+const profile = (await getEntry('profile', 'profile'))!.data;
+const repoUrl = `${profile.github}/${project.repo}`;
+// the longer text ("body") is written in Markdown
+const bodyHtml = project.body ? await marked.parse(t(project.body, lang)) : '';
+---
+<Layout
+        lang={lang}
+        title={`${project.title} – ${profile.name}`}
+        description={t(project.description, lang)}
+        path={`/projects/${project.repo}/`}
+>
+    <article class="container project">
+        <a class="back" href={`/${lang}/#projects`}>← {ui('project.back')}</a>
+
+        <!-- same transition:name as the card on the home page, so the card flies into this place -->
+        <header class="intro" transition:name={`project-${project.repo}`}>
+            <h1>{project.title}</h1>
+            <p class="desc">{t(project.description, lang)}</p>
+            {project.tags.length > 0 && <ul class="tags">{project.tags.map((tag) => <li>{tag}</li>)}</ul>}
+            <p class="links">
+                <a class="btn primary" href={repoUrl}>{ui('projects.code')}</a>
+                {project.demo && <a class="btn" href={project.demo}>{ui('projects.demo')}</a>}
+            </p>
+        </header>
+
+        {project.highlights.length > 0 && (
+                <dl class="stats">
+                    {project.highlights.map((h) => (
+                            <div><dt>{t(h.label, lang)}</dt><dd>{h.value}</dd></div>
+                    ))}
+                </dl>
+        )}
+
+        {pickScene(project) !== 'none' && (
+                <section class="block">
+                    <h2>{ui('project.demo')}</h2>
+                    <Demo3D project={project} interactive label={ui('project.demoHint')} />
+                </section>
+        )}
+
+        {bodyHtml && (
+                <section class="block">
+                    <h2>{ui('project.overview')}</h2>
+                    <div class="prose" set:html={bodyHtml} />
+                </section>
+        )}
+    </article>
+</Layout>
+
+<style>
+    .project { padding-block: 3rem 6rem; }
+    .back { font-family: var(--font-mono); font-size: 0.9rem; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--accent); }
+
+    .intro {
+        margin-top: 2rem;
+        padding: 2.5rem;
+        background: var(--surface);
+        border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+        border-radius: var(--radius);
+    }
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 1rem; }
+    .desc { font-size: 1.25rem; margin-bottom: 1.5rem; }
+    .links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.75rem 0 0; }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1px;
+        margin: 2rem 0 0;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .stats div { background: var(--bg); padding: 1.25rem; display: flex; flex-direction: column-reverse; gap: 0.3rem; }
+    .stats dt { font-size: 0.85rem; color: var(--muted); }
+    .stats dd { margin: 0; font-family: var(--font-mono); font-size: 1.8rem; color: var(--accent); }
+
+    .block { margin-top: 4rem; }
+    .block h2::before { content: '# '; color: var(--accent); }
+    .block h2 { margin-bottom: 1.5rem; }
+
+    /* Markdown text */
+    .prose { max-width: 70ch; }
+    .prose :global(h3) { margin: 2rem 0 0.75rem; }
+    .prose :global(ol), .prose :global(ul) { padding-left: 1.25rem; }
+    .prose :global(li) { margin-bottom: 0.5rem; }
+    .prose :global(strong) { color: var(--text); font-weight: 600; }
+    .prose :global(code) { font-family: var(--font-mono); font-size: 0.9em; color: var(--accent); }
+    .prose :global(p) { color: var(--text); }
+
+    @media (max-width: 760px) { .intro { padding: 1.5rem; } }
+</style>

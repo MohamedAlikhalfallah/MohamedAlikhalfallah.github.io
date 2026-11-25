@@ -1,0 +1,100 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Demo3D from './Demo3D.astro';
+import { t, useUI, type Lang } from '../i18n';
+
+interface Props {
+    lang: Lang;
+    project: CollectionEntry<'projects'>['data'];
+    github: string;
+}
+const { lang, project, github } = Astro.props;
+const ui = useUI(lang);
+const repoUrl = `${github}/${project.repo}`;
+const pageUrl = `/${lang}/projects/${project.repo}/`;
+---
+<!-- transition:name lets this card fly into its place on the project page -->
+<article class:list={['card', { featured: project.featured }]} transition:name={`project-${project.repo}`}>
+    <!-- the small 3D demo (it starts when the card scrolls into view) -->
+    <div class="visual"><Demo3D project={project} /></div>
+    <div class="content">
+        {project.featured && <p class="badge">{ui('projects.featured')}</p>}
+        <h3><a class="title-link" href={pageUrl}>{project.title}</a></h3>
+        <p class="desc">{t(project.description, lang)}</p>
+
+        {project.highlights.length > 0 && (
+                <dl class="stats">
+                    {project.highlights.map((h) => (
+                            <div><dt>{t(h.label, lang)}</dt><dd>{h.value}</dd></div>
+                    ))}
+                </dl>
+        )}
+
+        {project.tags.length > 0 && (
+                <ul class="tags">{project.tags.map((tag) => <li>{tag}</li>)}</ul>
+        )}
+
+        <p class="links">
+            <a href={pageUrl}>{ui('projects.details')}</a>
+            <a href={repoUrl}>{ui('projects.code')}</a>
+            {project.demo && <a href={project.demo}>{ui('projects.demo')}</a>}
+        </p>
+    </div>
+</article>
+
+<style>
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        transition: border-color 0.15s;
+    }
+    .card:hover { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
+    .content { display: flex; flex-direction: column; gap: 1rem; flex: 1; }
+    .visual:empty { display: none; }
+
+    /* featured card: full width, text on the left, 3D demo on the right */
+    .card.featured {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 2rem;
+        align-items: center;
+        padding: 2rem;
+        border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    }
+    .card.featured .visual { order: 2; }
+    .card.featured h3 { font-size: 1.6rem; }
+    .card.featured .stats { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 860px) {
+        .card.featured { grid-template-columns: 1fr; }
+        .card.featured .visual { order: 0; }
+    }
+
+    .title-link { color: inherit; text-decoration: none; }
+    .title-link:hover { color: var(--accent); }
+    .badge { margin: 0; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); }
+    .desc { margin: 0; color: var(--muted); }
+    .featured .desc { color: var(--text); font-size: 1.1rem; }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1px;
+        margin: 0.5rem 0;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .stats div { background: var(--bg); padding: 1rem; display: flex; flex-direction: column-reverse; gap: 0.25rem; }
+    .stats dt { font-size: 0.8rem; color: var(--muted); }
+    .stats dd { margin: 0; font-family: var(--font-mono); font-size: 1.5rem; color: var(--accent); }
+
+    .links { margin: auto 0 0; display: flex; gap: 1.25rem; font-family: var(--font-mono); font-size: 0.9rem; }
+</style>

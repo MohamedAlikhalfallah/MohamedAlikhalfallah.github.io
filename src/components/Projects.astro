@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+import { useUI, type Lang } from '../i18n';
+
+interface Props { lang: Lang; github: string; }
+const { lang, github } = Astro.props;
+const ui = useUI(lang);
+
+// visible projects: featured first, then by "order", then the most recently updated
+const projects = (await getCollection('projects'))
+    .map((p) => p.data)
+    .filter((p) => !p.hidden)
+    .sort((a, b) =>
+        Number(b.featured) - Number(a.featured) ||
+        a.order - b.order ||
+        b.updated.localeCompare(a.updated),
+    );
+---
+<section id="projects" class="section">
+    <div class="container">
+        <h2>{ui('nav.projects')}</h2>
+        {projects.length === 0
+            ? <p>{ui('projects.empty')}</p>
+            : <div class="grid">{projects.map((p) => <ProjectCard lang={lang} project={p} github={github} />)}</div>}
+    </div>
+</section>
+
+<style>
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
+</style>

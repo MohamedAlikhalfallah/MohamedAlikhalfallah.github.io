@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { t, useUI, type Lang } from '../i18n';
+
+interface Props { lang: Lang; profile: CollectionEntry<'profile'>['data']; }
+const { lang, profile } = Astro.props;
+const ui = useUI(lang);
+const degree = profile.education[0];
+---
+<section id="about" class="section">
+    <div class="container">
+        <h2>{ui('nav.about')}</h2>
+        <div class="cols">
+            <p class="about">{t(profile.about, lang)}</p>
+            <dl class="facts">
+                <dt>{ui('about.location')}</dt>
+                <dd>{t(profile.location, lang)}</dd>
+                {degree && (<>
+                    <dt>{ui('about.degree')}</dt>
+                    <dd>{t(degree.degree, lang)}<br /><span class="muted">{t(degree.school, lang)}</span></dd>
+                </>)}
+                <dt>{ui('about.languages')}</dt>
+                <dd>
+                    {profile.languages.map((l) => (
+                            <span class="lang">{t(l.name, lang)} <span class="muted">({t(l.level, lang)})</span></span>
+                    ))}
+                </dd>
+            </dl>
+        </div>
+    </div>
+</section>
+
+<style>
+    .cols { display: grid; grid-template-columns: 1.6fr 1fr; gap: 4rem; }
+    .about { font-size: 1.15rem; }
+    .facts { margin: 0; display: grid; gap: 0.3rem 0; align-content: start; }
+    dt { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); margin-top: 0.9rem; }
+    dt:first-child { margin-top: 0; }
+    dd { margin: 0; }
+    .muted { color: var(--muted); }
+    .lang { display: block; }
+    @media (max-width: 760px) { .cols { grid-template-columns: 1fr; gap: 2rem; } }
+</style>

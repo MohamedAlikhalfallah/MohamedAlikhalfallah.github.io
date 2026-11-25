@@ -1,0 +1,128 @@
+/* ---------- Colours, fonts, sizes ---------- */
+:root {
+    --bg: #0e1318;          /* page background: dark graphite */
+    --surface: #141b21;     /* cards */
+    --line: #233039;        /* borders and grid lines */
+    --text: #dde6ec;        /* main text */
+    --muted: #8797a3;       /* secondary text */
+    --accent: #f5b841;      /* laser amber: links, highlights, occupied cells */
+    --free: #3fb8af;        /* teal: "available" status, free cells */
+
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+
+    --max: 1080px;
+    --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--font-mono); line-height: 1.2; margin: 0; font-weight: 600; }
+h2 { font-size: 1.6rem; margin-bottom: 2rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0 0 1rem; max-width: 68ch; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+img { max-width: 100%; display: block; }
+
+/* ---------- Layout helpers ---------- */
+.container { width: min(var(--max), 100% - 2.5rem); margin-inline: auto; }
+
+.section { padding-block: 5.5rem; border-top: 1px solid var(--line); }
+
+/* Section heading: "#" marker in amber, like a heading in a code editor */
+.section h2::before { content: '# '; color: var(--accent); }
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-block;
+    padding: 0.7rem 1.2rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--accent);
+    transition: background 0.15s, color 0.15s;
+}
+.btn:hover { background: var(--accent); color: var(--bg); }
+.btn.primary { background: var(--accent); color: var(--bg); }
+.btn.primary:hover { background: transparent; color: var(--accent); }
+
+/* ---------- Tags (skills, technologies) ---------- */
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0; }
+.tags li {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--muted);
+}
+/* ---------- Scroll animations (see src/scripts/reveal.ts) ---------- */
+/* contents rise up out of a slight 3D tilt */
+.reveal:not(.in-view) { opacity: 0; }
+.reveal.in-view { animation: rise 0.9s cubic-bezier(0.25, 0.6, 0.3, 1) var(--delay, 0ms) both; }
+@keyframes rise {
+    from { opacity: 0; transform: perspective(1000px) rotateX(18deg) translateY(60px); }
+    to   { opacity: 1; transform: none; }
+}
+/* an amber scan line sweeps once over the section */
+.reveal-scan { position: relative; }
+.reveal-scan::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    box-shadow: 0 0 18px 2px color-mix(in srgb, var(--accent) 45%, transparent);
+    opacity: 0;
+    pointer-events: none;
+}
+.reveal-scan.in-view::after { animation: scan 1.2s cubic-bezier(0.4, 0, 0.2, 1) both; }
+@keyframes scan {
+    0%   { top: 0; opacity: 0; }
+    10%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+/* ---------- 3D page transition ---------- */
+/* forwards: the old page tilts away to the left and sinks back, the new one swings in from the right */
+@keyframes page-out {
+    to { transform: perspective(1400px) translateZ(-260px) rotateY(18deg); opacity: 0; }
+}
+@keyframes page-in {
+    from { transform: perspective(1400px) translateZ(-260px) rotateY(-18deg); opacity: 0; }
+}
+/* backwards (browser "back" button): the same movement mirrored */
+@keyframes page-out-back {
+    to { transform: perspective(1400px) translateZ(-260px) rotateY(-18deg); opacity: 0; }
+}
+@keyframes page-in-back {
+    from { transform: perspective(1400px) translateZ(-260px) rotateY(18deg); opacity: 0; }
+}
+/* the project card flies to its place on the project page */
+::view-transition-group(*) { animation-duration: 0.55s; animation-timing-function: cubic-bezier(0.2, 0, 0, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}

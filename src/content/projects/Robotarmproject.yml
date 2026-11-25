@@ -1,0 +1,42 @@
+# Created automatically from GitHub. You can change anything in this file.
+# Texts you change are never overwritten by the sync. hidden: true removes the project from the website.
+
+repo: Robotarmproject
+title: Vision-Guided Robotic Grasping (ROS 2)
+hidden: false
+featured: false
+order: 3
+description:
+  en: >-
+    A ROS 2 module that lets a robot arm pick, push and pull objects on its own. It turns
+    3D detections from a camera into robot coordinates, chooses a grasp strategy from the
+    object's shape and executes it with MoveIt2.
+  de: >-
+    Ein ROS-2-Modul, mit dem ein Roboterarm Objekte selbstständig greifen, schieben und ziehen
+    kann. Es überführt 3D-Erkennungen einer Kamera in Roboterkoordinaten, wählt anhand der
+    Objektform eine Greifstrategie und führt sie mit MoveIt2 aus.
+
+tags: [ROS 2 Jazzy, MoveIt2, TF2, ros2_control, Python]
+language: Makefile
+demo3d: auto
+demo: ""
+updated: "2026-03-08"
+body:
+  en: |-
+    ## 📖 Project Description
+
+    This project implements an intelligent robotic grasping module for ROS2 that enables autonomous object manipulation through vision-guided affordance recognition. The system receives 3D bounding box data from a vision pipeline, uses TF2 for coordinate transformation from camera frame to robot base frame, and classifies objects based on their affordances (GRASPABLE, PUSHABLE, PULLABLE). It automatically selects optimal grasp strategies—SIDE grasp for tall objects or TOP grasp for flat objects—based on aspect ratio analysis. The system employs a state machine for robust execution control and coordinates with navigation and motion planning modules through ROS2 topics. Built with C++17, it integrates MoveIt2 for motion planning, TF2 for coordinate transformations, and ros2_control for gripper management. The module supports pick-and-place operations, push actions for doors and cabinets, and pull actions for drawers, making it suitable for warehouse automation, manufacturing, and assistive robotics applications.
+
+    ## 🛠️ Technologies Used
+
+    **Core Technologies:** ROS2 Jazzy • C++17 • MoveIt2 • TF2 • ros2_control  
+    **Architecture:** State Machine • Custom ROS2 Messages • Action Servers
+  de: |-
+    ## 📖 Projektbeschreibung
+
+    Dieses Projekt implementiert ein intelligentes Roboter-Greifmodul für ROS2, das die autonome Objektmanipulation durch bildverarbeitungsgestützte Affordanzerkennung ermöglicht. Das System empfängt 3D-Bounding-Box-Daten aus einer Bildverarbeitungspipeline, nutzt TF2 für die Koordinatentransformation vom Kamerabezugssystem in das Roboter-Basisbezugssystem und klassifiziert Objekte anhand ihrer Affordanzen (GRASPABLE, PUSHABLE, PULLABLE). Es wählt automatisch optimale Greifstrategien aus – SIDE-Greifvorgang für hohe Objekte oder TOP-Greifvorgang für flache Objekte – basierend auf einer Analyse des Seitenverhältnisses. Das System nutzt eine Zustandsmaschine für eine robuste Ausführungssteuerung und koordiniert sich über ROS2-Topics mit Navigations- und Bewegungsplanungsmodulen. Es wurde mit C++17 entwickelt und integriert MoveIt2 für die Bewegungsplanung, TF2 für Koordinatentransformationen sowie ros2_control für das Greifermanagement. Das Modul unterstützt Pick-and-Place-Vorgänge, Schiebevorgänge für Türen und Schränke sowie Ziehvorgänge für Schubladen und eignet sich somit für Anwendungen in der Lagerautomatisierung, der Fertigung und der assistiven Robotik.
+
+    ## 🛠️ Verwendete Technologien
+
+    **Kerntechnologien:** ROS2 Jazzy • C++17 • MoveIt2 • TF2 • ros2_control  
+    **Architektur:** Zustandsmaschine • Benutzerdefinierte ROS2-Nachrichten • Aktionsserver

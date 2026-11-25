@@ -1,0 +1,82 @@
+# Created automatically from GitHub. You can change anything in this file.
+# Texts you change are never overwritten by the sync. hidden: true removes the project from the website.
+
+repo: Myproject
+title: SEP-Drive – Ride-Sharing Platform
+hidden: false
+featured: false
+order: 2
+description:
+  en: >-
+    A full-stack ride-sharing web app with a Spring Boot REST API and an Angular frontend.
+    Features email-based two-factor login, separate flows for drivers and customers, ride
+    requests and offers, and a Docker setup for one-command start.
+  de: >-
+    Eine Full-Stack-Webanwendung für Fahrgemeinschaften mit Spring-Boot-REST-API und
+    Angular-Frontend. Mit Zwei-Faktor-Login per E-Mail, eigenen Abläufen für Fahrer und
+    Kunden, Fahranfragen und -angeboten sowie einem Docker-Setup zum Start mit einem Befehl.
+
+tags: [Java, Spring Boot, Angular, REST API, JWT, Docker]
+language: Java
+demo3d: city
+demo: ""
+updated: "2026-03-04"
+body:
+  en: |-
+    ## 📖 Project Description
+
+    **SEP-Drive** is a full-stack ride-sharing web application where **customers** create ride requests and **drivers** browse available requests and make offers. The system supports an end-to-end ride flow: user registration, secure login with **email-based 2FA**, profile pages, **map-based route visualization**, ride planning (distance/duration/price), and a coordinated driver–customer workflow from request → offer → acceptance → ride execution.
+
+    The application is built as a **service-based web system** with a **Spring Boot (Java) backend** and an **Angular frontend**, running as separate services (and optionally separate Docker containers). Data is stored persistently using **H2**, and the app is designed to support features like account balances, ride history, ratings, and additional modules such as chat and driver statistics/leaderboards.
+
+    ## 🛠️ Technologies Used
+
+    **Core Technologies:** Java • Spring Boot • H2 • Angular • TypeScript • SCSS • Docker • Git  
+    **Architecture:** Frontend/Backend Separation • REST API • Containerized Services
+
+    ## ✨ Key Features
+
+    - 👤 **User Registration** with roles (**Driver** / **Customer**)
+    - 🔐 **Secure Login with 2FA** (verification code sent via email)
+    - 🧑‍💼 **User Profiles** (role-specific details + ratings/trip counts)
+    - 🗺️ **Interactive Map & Route Visualization**
+      - start/destination pins, optional waypoints, route rendering
+    - 🚕 **Ride Requests**
+      - customers create/delete an active request (one active request at a time)
+      - vehicle class selection (e.g., small/medium/deluxe)
+    - 💸 **Ride Planning**
+      - calculate distance, duration, and price based on vehicle class factor
+    - 🤝 **Driver Offers & Acceptance Flow**
+      - drivers offer rides, customers accept/decline, competing offers handled
+    - 🧾 **Ride Tracking / Simulation**
+      - route-based progress visualization and synchronized state
+    - ⭐ **Ratings & Ride History** after completion
+  de: |-
+    ## 📖 Projektbeschreibung
+
+    **SEP-Drive** ist eine Full-Stack-Webanwendung für Mitfahrgelegenheiten, in der **Kunden** Fahrtanfragen erstellen und **Fahrer** verfügbare Anfragen durchsuchen und Angebote unterbreiten. Das System unterstützt den gesamten Fahrtenablauf: Benutzerregistrierung, sichere Anmeldung mit **E-Mail-basierter 2FA**, Profilseiten, **kartenbasierte Routenvisualisierung**, Fahrtenplanung (Entfernung/Dauer/Preis) sowie einen koordinierten Fahrer-Kunden-Workflow von Anfrage → Angebot → Annahme → Durchführung der Fahrt.
+
+    Die Anwendung ist als **servicebasiertes Websystem** mit einem **Spring Boot (Java)-Backend** und einem **Angular-Frontend** aufgebaut, die als separate Dienste (und optional in separaten Docker-Containern) laufen. Die Daten werden mithilfe von **H2** dauerhaft gespeichert, und die App ist so konzipiert, dass sie Funktionen wie Kontostände, Fahrthistorie, Bewertungen sowie zusätzliche Module wie Chat und Fahrerstatistiken/Ranglisten unterstützt.
+
+    ## 🛠️ Verwendete Technologien
+
+    **Kerntechnologien:** Java • Spring Boot • H2 • Angular • TypeScript • SCSS • Docker • Git  
+    **Architektur:** Trennung von Frontend und Backend • REST-API • Containerisierte Dienste
+
+    ## ✨ Wichtigste Funktionen
+
+    - 👤 **Benutzerregistrierung** mit Rollen (**Fahrer** / **Kunde**)
+    - 🔐 **Sichere Anmeldung mit 2FA** (Bestätigungscode per E-Mail)
+    - 🧑‍💼 **Benutzerprofile** (rollenspezifische Details + Bewertungen/Anzahl der Fahrten)
+    - 🗺️ **Interaktive Karte & Routenvisualisierung**
+      - Start-/Zielmarkierungen, optionale Zwischenziele, Routendarstellung
+    - 🚕 **Fahrtanfragen**
+      - Kunden erstellen/löschen eine aktive Anfrage (jeweils eine aktive Anfrage)
+      - Auswahl der Fahrzeugklasse (z. B. klein/mittel/Deluxe)
+    - 💸 **Fahrplanung**
+      - Berechnung von Entfernung, Dauer und Preis basierend auf dem Fahrzeugklassenfaktor
+    - 🤝 **Angebote von Fahrern & Annahmeablauf**
+      - Fahrer bieten Fahrten an, Kunden nehmen diese an oder lehnen sie ab; konkurrierende Angebote werden berücksichtigt
+    - 🧾 **Fahrtenverfolgung / Simulation**
+      - Routenbasierte Visualisierung des Fortschritts und synchronisierter Status
+    - ⭐ **Bewertungen & Fahrtenverlauf** nach Abschluss der Fahrt

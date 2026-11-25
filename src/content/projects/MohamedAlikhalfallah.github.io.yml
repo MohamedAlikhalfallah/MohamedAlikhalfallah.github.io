@@ -1,0 +1,101 @@
+# Created automatically from GitHub. You can change anything in this file.
+# Texts you change are never overwritten by the sync. hidden: true removes the project from the website.
+
+repo: MohamedAlikhalfallah.github.io
+title: MohamedAlikhalfallah.Github.Io
+hidden: true
+featured: false
+order: 100
+description:
+  en: My personal portfolio
+  de: Mein persönliches Portfolio
+tags: []
+language: TypeScript
+demo3d: auto
+demo: ""
+updated: "2026-11-25"
+body:
+  en: |-
+    ```sh
+    npm create astro@latest -- --template minimal
+    ```
+
+    > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+
+    ## 🚀 Project Structure
+
+    Inside of your Astro project, you'll see the following folders and files:
+
+    ```text
+    /
+    ├── public/
+    ├── src/
+    │   └── pages/
+    │       └── index.astro
+    └── package.json
+    ```
+
+    Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+
+    There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+
+    Any static assets, like images, can be placed in the `public/` directory.
+
+    ## 🧞 Commands
+
+    All commands are run from the root of the project, from a terminal:
+
+    | Command                   | Action                                           |
+    | :------------------------ | :----------------------------------------------- |
+    | `npm install`             | Installs dependencies                            |
+    | `npm run dev`             | Starts local dev server at `localhost:4321`      |
+    | `npm run build`           | Build your production site to `./dist/`          |
+    | `npm run preview`         | Preview your build locally, before deploying     |
+    | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+    | `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+    ## 👀 Want to learn more?
+
+    Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+  de: |-
+    ```sh
+    npm create astro@latest -- --template minimal
+    ```
+
+    > 🧑‍🚀 **Erfahrener Astronaut?** Lösche diese Datei. Viel Spaß!
+
+    ## 🚀 Projektstruktur
+
+    In deinem Astro-Projekt findest du die folgenden Ordner und Dateien:
+
+    ```text
+    /
+    ├── public/
+    ├── src/
+    │   └── pages/
+    │       └── index.astro
+    └── package.json
+    ```
+
+    Astro sucht im Verzeichnis `src/pages/` nach Dateien mit den Endungen `.astro` oder `.md`. Jede Seite wird basierend auf ihrem Dateinamen als Route bereitgestellt.
+
+    Das Verzeichnis `src/components/` hat nichts Besonderes an sich, aber dort legen wir gerne alle Astro-/React-/Vue-/Svelte-/Preact-Komponenten ab.
+
+    Alle statischen Assets, wie beispielsweise Bilder, können im Verzeichnis `public/` abgelegt werden.
+
+    ## 🧞 Befehle
+
+    Alle Befehle werden vom Stammverzeichnis des Projekts aus über ein Terminal ausgeführt:
+
+    | Befehl | Aktion |
+    | :------------------------ | :----------------------------------------------- |
+    | `npm install` | Installiert Abhängigkeiten |
+    | `npm run dev` | Startet den lokalen Entwicklungsserver unter `localhost:4321` |
+    | `npm run build` | Erstellt deine Produktions-Website im Verzeichnis `./dist/` |
+    | `npm run preview` | Zeigt eine lokale Vorschau des Builds vor der Bereitstellung an     |
+    | `npm run astro ...` | Führt CLI-Befehle wie `astro add` und `astro check` aus |
+    | `npm run astro -- --help` | Zeigt Hilfe zur Verwendung der Astro-CLI an |
+
+    ## 👀 Möchtest du mehr erfahren?
+
+    Schau dir gerne [unsere Dokumentation](https://docs.astro.build) an oder besuche unseren [Discord-Server](https://astro.build/chat).

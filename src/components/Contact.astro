@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ContactForm from './ContactForm.astro';
+import { useUI, type Lang } from '../i18n';
+
+interface Props { lang: Lang; profile: CollectionEntry<'profile'>['data']; }
+const { lang, profile } = Astro.props;
+const ui = useUI(lang);
+const phoneLink = profile.phone.replace(/[^+\d]/g, '');
+---
+<section id="contact" class="section">
+    <div class="container">
+        <h2>{ui('nav.contact')}</h2>
+        <p class="intro">{ui('contact.text')}</p>
+        <dl class="channels">
+            <div><dt>{ui('contact.email')}</dt><dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd></div>
+            {profile.phone && <div><dt>{ui('contact.phone')}</dt><dd><a href={`tel:${phoneLink}`}>{profile.phone}</a></dd></div>}
+            {profile.linkedin && <div><dt>LinkedIn</dt><dd><a href={profile.linkedin}>{profile.name}</a></dd></div>}
+            <div><dt>GitHub</dt><dd><a href={profile.github}>{profile.github.replace('https://github.com/', '')}</a></dd></div>
+        </dl>
+
+        {profile.contactFormKey && (
+                <ContactForm lang={lang} accessKey={profile.contactFormKey} name={profile.name} />
+        )}
+    </div>
+</section>
+
+<style>
+    .intro { font-size: 1.2rem; margin-bottom: 2.5rem; }
+    .channels { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.5rem; margin: 0; }
+    dt { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+    dd { margin: 0; font-family: var(--font-mono); font-size: 0.95rem; overflow-wrap: anywhere; }
+</style>

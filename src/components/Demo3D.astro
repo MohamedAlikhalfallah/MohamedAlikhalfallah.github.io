@@ -1,0 +1,93 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { pickScene, pickColor } from '../scripts/demos/pick';
+
+interface Props {
+    project: CollectionEntry<'projects'>['data'];
+    interactive?: boolean;   // true on the project page: drag to turn
+    label?: string;          // text shown under the interactive demo
+}
+const { project, interactive = false, label } = Astro.props;
+const scene = pickScene(project);
+const color = pickColor(project);
+---
+{scene !== 'none' && (
+<div
+        class:list={['demo3d', { interactive }]}
+        data-scene={scene}
+        data-seed={project.repo}
+        data-color={color}
+        data-interactive={interactive ? 'true' : 'false'}
+>
+    <canvas aria-hidden="true"></canvas>
+    {interactive && label && <p class="hint">{label}</p>}
+</div>
+    )}
+
+<style>
+    .demo3d {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 4px;
+        overflow: hidden;
+        /* a faint grid behind the 3D scene, like on a technical drawing */
+        background:
+                radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%),
+                repeating-linear-gradient(0deg, transparent 0 23px, rgb(35 48 57 / 0.5) 23px 24px),
+                repeating-linear-gradient(90deg, transparent 0 23px, rgb(35 48 57 / 0.5) 23px 24px),
+                var(--bg);
+    }
+    .demo3d.interactive { aspect-ratio: 16 / 8; cursor: grab; border: 1px solid var(--line); }
+    .demo3d.interactive:active { cursor: grabbing; }
+    canvas { display: block; width: 100%; height: 100%; }
+    .hint {
+        position: absolute;
+        right: 1rem;
+        bottom: 0.75rem;
+        margin: 0;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--muted);
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    // Start a 3D demo when it scrolls into view and stop it when it leaves.
+    // three.js is only downloaded when the first demo becomes visible.
+    document.addEventListener('astro:page-load', () => {
+        const demos = document.querySelectorAll<HTMLElement>('.demo3d');
+        if (demos.length === 0) return;
+
+        const running = new Map<HTMLElement, () => void>();
+        const observer = new IntersectionObserver(async (entries) => {
+            for (const entry of entries) {
+                const el = entry.target as HTMLElement;
+                if (entry.isIntersecting && !running.has(el)) {
+                    running.set(el, () => {});   // reserve, so it doesn't start twice
+                    const { mountDemo } = await import('../scripts/demos/engine');
+                    if (!running.has(el)) continue;   // left the screen while loading
+                    running.set(el, mountDemo(el, {
+                        scene: el.dataset.scene!,
+                        seed: el.dataset.seed!,
+                        color: el.dataset.color!,
+                        interactive: el.dataset.interactive === 'true',
+                    }));
+                } else if (!entry.isIntersecting && running.has(el)) {
+                    running.get(el)!();
+                    running.delete(el);
+                }
+            }
+        }, { rootMargin: '150px 0px' });
+
+        demos.forEach((el) => observer.observe(el));
+
+        // stop everything when we leave the page
+        document.addEventListener('astro:before-swap', () => {
+            observer.disconnect();
+            running.forEach((stop) => stop());
+            running.clear();
+        }, { once: true });
+    });
+</script>
