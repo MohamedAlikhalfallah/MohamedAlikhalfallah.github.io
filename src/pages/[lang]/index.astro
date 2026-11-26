@@ -18,7 +18,7 @@ const profile = (await getEntry('profile', 'profile'))!.data;
 <Layout
         lang={lang}
         title={`${profile.name} – ${t(profile.role, lang)}`}
-        description={t(profile.headline, lang)}
+        description={`${t(profile.headline, lang)} ${t(profile.availability, lang)}.`}
         hero
 >
     <Hero slot="hero" lang={lang} profile={profile} />
