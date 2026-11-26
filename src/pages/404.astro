@@ -1,0 +1,33 @@
+---
+// Shown by GitHub Pages for every address that doesn't exist
+import Layout from '../layouts/Layout.astro';
+---
+<Layout lang="en" title="404 – Page not found" description="Page not found" noindex>
+    <section class="container notfound">
+        <p class="code">404</p>
+        <!-- a tiny occupancy map: everything is "unknown" except one scanned row -->
+        <div class="map" aria-hidden="true">
+            {Array.from({ length: 48 }, (_, i) => <span class:list={[{ free: i >= 16 && i < 28, wall: i === 28 }]} />)}
+        </div>
+        <h1>Page not found <span lang="de">· Seite nicht gefunden</span></h1>
+        <p>This part of the map hasn’t been scanned yet – the page doesn’t exist.</p>
+        <p lang="de">Dieser Teil der Karte wurde noch nicht gescannt – die Seite existiert nicht.</p>
+        <p class="links">
+            <a class="btn primary" href="/en/">Home (English)</a>
+            <a class="btn" href="/de/">Startseite (Deutsch)</a>
+        </p>
+    </section>
+</Layout>
+
+<style>
+    .notfound { padding-block: 5rem 7rem; }
+    .code { font-family: var(--font-mono); font-size: clamp(4rem, 14vw, 8rem); line-height: 1; color: var(--accent); margin: 0 0 1.5rem; }
+    .map { display: grid; grid-template-columns: repeat(12, 18px); gap: 3px; margin-bottom: 2rem; }
+    .map span { width: 18px; height: 18px; background: rgb(35 48 57 / 0.6); border-radius: 2px; }
+    .map .free { background: color-mix(in srgb, var(--free) 35%, transparent); }
+    .map .wall { background: var(--accent); }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 1.25rem; }
+    h1 span { color: var(--muted); font-weight: 400; }
+    p { color: var(--muted); }
+    .links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+</style>

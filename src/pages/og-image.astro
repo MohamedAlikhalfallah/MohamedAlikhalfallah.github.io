@@ -1,0 +1,65 @@
+---
+// A 1200 × 630 "poster" of the portfolio, used as the link preview picture.
+// Open /og-image/ in Chrome, take a screenshot of the card (see Step 10.2) and save it as
+// public/images/og.png. Repeat whenever your photo or title changes.
+import { getEntry } from 'astro:content';
+import '@fontsource-variable/jetbrains-mono';
+import '@fontsource/ibm-plex-sans/400.css';
+import '../styles/global.css';
+
+const p = (await getEntry('profile', 'profile'))!.data;
+const site = Astro.site!.host;
+
+// a small occupancy map in the background: walls in amber, scanned free space in teal
+const COLS = 40, ROWS = 21, SX = 31, SY = 10;
+const cells = Array.from({ length: COLS * ROWS }, (_, i) => {
+    const x = i % COLS, y = Math.floor(i / COLS);
+    const wall = (y === 1 || y === ROWS - 2 || x === 1 || x === COLS - 2) && x > 0 && y > 0 && x < COLS - 1 && y < ROWS - 1;
+    const a = Math.atan2(y - SY, x - SX);
+    const inFan = (a > -2.6 && a < -0.2) || (a > 0.4 && a < 2.9);
+    if (wall && inFan && x > 18) return 'o';
+    if (!wall && inFan && x > 18 && Math.hypot(x - SX, y - SY) < 22) return 'f';
+    return '';
+});
+---
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Link preview image</title>
+</head>
+<body>
+<div id="og-card">
+    <div class="grid">{cells.map((c) => <i class={c} />)}</div>
+    <div class="content">
+        {p.available && <div class="status"><b></b>{p.availability.en}</div>}
+        <h1>{p.name}</h1>
+        <p class="role">{p.role.en} · {p.location.en}</p>
+        <p class="head">{p.headline.en}</p>
+    </div>
+    <div class="photo"><img src={p.photo} alt="" /></div>
+    <div class="url">{site}</div>
+</div>
+</body>
+</html>
+
+<style>
+    body { margin: 0; padding: 40px; background: #05080a; }
+    #og-card { width: 1200px; height: 630px; background: var(--bg); color: var(--text); position: relative; overflow: hidden; }
+    .grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(40, 30px); grid-auto-rows: 30px; }
+    .grid i { margin: 2px; border-radius: 2px; background: rgb(35 48 57 / 0.45); }
+    .grid i.f { background: rgb(63 184 175 / 0.12); }
+    .grid i.o { background: rgb(245 184 65 / 0.5); }
+    .content { position: absolute; left: 80px; top: 0; bottom: 0; width: 700px; display: flex; flex-direction: column; justify-content: center; }
+    .status { display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; margin-bottom: 36px; padding: 8px 20px; font-family: var(--font-mono); font-size: 22px; color: var(--free); border: 1.5px solid rgb(63 184 175 / 0.45); background: #121d22; border-radius: 999px; }
+    .status b { width: 12px; height: 12px; border-radius: 50%; background: var(--free); }
+    h1 { max-width: 640px; margin: 0 0 22px; font-size: 76px; line-height: 1.05; letter-spacing: -1.5px; }
+    .role { margin: 0 0 22px; font-family: var(--font-mono); font-size: 30px; color: var(--accent); }
+    .head { margin: 0; font-size: 28px; line-height: 1.4; color: #c9d4db; }
+    .photo { position: absolute; right: 110px; top: 115px; padding: 16px; }
+    .photo img { width: 280px; height: 380px; object-fit: cover; object-position: top; border-radius: 6px; }
+    .photo::before, .photo::after { content: ''; position: absolute; width: 44px; height: 44px; border: 3px solid var(--accent); }
+    .photo::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+    .photo::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+    .url { position: absolute; left: 80px; bottom: 36px; font-family: var(--font-mono); font-size: 22px; color: var(--muted); }
+</style>
