@@ -6,13 +6,11 @@ order: 1
 
 description:
   en: >-
-    Real-time 2D and 3D probabilistic occupancy mapping on a LiDAR iPhone, running
-    entirely on the device. My bachelor thesis at the University of Duisburg-Essen.
+    Real-time 2D and 3D probabilistic occupancy mapping on a LiDAR iPhone, running entirely on the device. My bachelor thesis at the University of Duisburg-Essen.
   de: >-
-    Probabilistische 2D- und 3D-Belegungskartierung in Echtzeit auf einem iPhone mit
-    LiDAR, vollständig auf dem Gerät. Meine Bachelorarbeit an der Universität Duisburg-Essen.
+    Probabilistische 2D- und 3D-Belegungskartierung in Echtzeit auf einem iPhone mit LiDAR, vollständig auf dem Gerät. Meine Bachelorarbeit an der Universität Duisburg-Essen.
 
-tags: [Swift, SwiftUI, ARKit, LiDAR, SIMD]
+tags: [ Swift, SwiftUI, ARKit, LiDAR, SIMD ]
 image: ""
 demo: ""
 demo3d: occupancy
@@ -84,3 +82,4 @@ body:
     Entfernte Objekte verschwinden innerhalb von Sekunden aus der Karte.
 
     **Tech-Stack:** Swift, SwiftUI, ARKit, LiDAR, SIMD, Grand Central Dispatch.
+updated: "2026-11-25"
