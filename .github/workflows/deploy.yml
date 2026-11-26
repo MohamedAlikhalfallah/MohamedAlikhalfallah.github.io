@@ -1,0 +1,75 @@
+# Builds the portfolio and publishes it on GitHub Pages.
+# Runs: on every push to master, every day at 05:17 (UTC), and by hand ("Run workflow").
+# Before building, it syncs the projects from GitHub and saves the changes in the repo.
+name: Sync & Deploy
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write   # to commit the synced project files
+  pages: write      # to publish the website
+  id-token: write   # needed by GitHub Pages
+
+# never run two deploys at the same time
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      - name: Install Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Sync projects from GitHub
+        run: npm run sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+
+      - name: Save synced changes in the repo
+        run: |
+          git config user.name "portfolio-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/projects src/data
+          if git diff --staged --quiet; then
+            echo "Nothing new from GitHub."
+          else
+            git commit -m "Sync projects from GitHub"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Build the website
+        run: npm run build
+
+      - name: Upload the website
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish on GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
