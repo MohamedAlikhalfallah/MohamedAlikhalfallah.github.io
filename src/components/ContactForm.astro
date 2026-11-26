@@ -36,10 +36,6 @@ const ui = useUI(lang);
         <textarea name="message" required rows="6" maxlength="5000"></textarea>
     </label>
 
-    <p class="privacy">
-        {ui('form.privacy')} <a href={`/${lang}/privacy/`}>{ui('form.privacyLink')}</a>.
-    </p>
-
     <div class="actions">
         <button class="btn primary" type="submit">{ui('form.send')}</button>
         <p class="status" role="status" aria-live="polite"></p>
@@ -73,7 +69,6 @@ const ui = useUI(lang);
     textarea { resize: vertical; min-height: 200px; }
     input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
     .trap { display: none; }
-    .privacy { margin: 0; font-size: 0.85rem; color: var(--muted); }
     .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
     .actions .btn { cursor: pointer; }
     .actions .btn:disabled { opacity: 0.6; cursor: wait; }
