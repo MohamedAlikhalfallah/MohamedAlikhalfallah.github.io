@@ -15,7 +15,7 @@
 // Run it with:  npm run sync
 // Optional:     DEEPL_API_KEY=... npm run sync   (better translations, also for READMEs)
 // ---------------------------------------------------------------------------
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import YAML from 'yaml';
@@ -156,6 +156,17 @@ await mkdir(new URL('src/data/', ROOT), { recursive: true });
 
 log(`reading public repos of ${OWNER} …`);
 const repos = (await github(`/users/${OWNER}/repos?per_page=100&type=owner&sort=pushed`)) ?? [];
+// oldest repos first, so new projects are numbered in the order you created them
+repos.sort((a, b) => (a.created_at ?? '').localeCompare(b.created_at ?? ''));
+
+// New projects are added at the end: they get the next number after the highest "order"
+// of the projects that are visible on the website (e.g. 1, 2, 3 → the next new one gets 4).
+let nextOrder = 1;
+for (const name of await readdir(PROJECTS_DIR)) {
+    if (!name.endsWith('.yml')) continue;
+    const p = YAML.parse(await readFile(new URL(name, PROJECTS_DIR), 'utf8')) ?? {};
+    if (p.hidden !== true && typeof p.order === 'number') nextOrder = Math.max(nextOrder, p.order + 1);
+}
 const seen = new Set();
 let created = 0, updated = 0;
 
@@ -174,13 +185,17 @@ for (const repo of repos) {
         // ---- new repo: create the project file ----
         const description = await bilingual(summary);
         const body = await bilingual(readme, { long: true });
-        const isPortfolio = repo.name.toLowerCase() === `${OWNER}.github.io`.toLowerCase();
+        // this website itself and the GitHub profile README repo (same name as the user) are not projects
+        const isPortfolio =
+            repo.name.toLowerCase() === `${OWNER}.github.io`.toLowerCase() ||
+            repo.name.toLowerCase() === OWNER.toLowerCase();
+        const hidden = repo.fork || isPortfolio;   // forks and these two are hidden at first
         const data = {
             repo: repo.name,
             title: humanize(repo.name),
-            hidden: repo.fork || isPortfolio,   // forks and this website itself are hidden at first
+            hidden,
             featured: false,
-            order: 100,
+            order: hidden ? 999 : nextOrder++,   // at the end of the list
             description,
             tags: topics,
             language: repo.language ?? '',
